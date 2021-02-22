@@ -1,0 +1,10 @@
+{
+  "name": "lambda",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "mammoth": "^1.4.16",
+    "pdf-parse": "^1.1.1"
+  }
+}
