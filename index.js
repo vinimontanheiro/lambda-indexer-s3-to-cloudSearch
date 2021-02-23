@@ -10,6 +10,8 @@ const getFileExtension = (filename) => {
   return extension || "";
 };
 
+const removeInvalidCharacters = (str) => str.replace(/[^0-9a-zA-Z/._-]/g, '');
+
 const removeInvalidFileContent = (str) => str.replace(/[^\u0009\u000a\u000d\u0020-\uD7FF\uE000-\uFFFD]/g, '');
 
 const decodeURISpaces = (str) => decodeURI(str).replace(/\+/g, ' ');
@@ -42,9 +44,9 @@ const getDOCXText = async (buffer) => {
   }
 }
 
-const getJBatch = async ({ bucketname, filename, buffer }) => {
+const getADDJBatch = async ({ bucketname, filename, buffer }) => {
   const type = 'add';
-  const id =  bucketname + ':' + filename;
+  const id =  `${bucketname}:${removeInvalidCharacters(filename)}`;
   const fields = {
     content_type: 'text/plain',
     resourcename: filename,
@@ -114,7 +116,7 @@ const addToCS = async ({ bucketname, filename, buffer, region, endpoint }) => {
       apiVersion: API_VERSION,
     });
 
-    const jbatch = await getJBatch({filename, bucketname, buffer});
+    const jbatch = await getADDJBatch({filename, bucketname, buffer});
 
     const params = {
       contentType: 'application/json',
