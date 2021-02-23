@@ -4,12 +4,27 @@ const pdf = require('pdf-parse')
 
 const API_VERSION = `2013-01-01`
 
+const getFileExtension = (filename) => {
+  const regex = /(?:\.([^.]+))?$/;
+  const [extension] = regex.exec(filename);
+  return extension || "";
+};
+
+const removeInvalidCharacters = (str) => str.replace(/[^0-9a-zA-Z/._-]/g, '')
+
+const decodeURISpaces = (str) => decodeURI(str).replace(/\+/g, ' ')
+
+const isPDF = (filename) => getFileExtension(filename).toLowerCase().match(/\.pdf/g)
+
+const isDOC = (filename) => getFileExtension(filename).toLowerCase().match(/\.docx/g)
+
 const getPDFText = async (buffer) => {
   try {
     const text = (await pdf(buffer)).text
     return text;
   } catch (error) {
     console.log(`getPDFText error`, error)
+    return "";
   }
 }
 
@@ -19,16 +34,9 @@ const getDOCXText = async (buffer) => {
     return text
   } catch (error) {
     console.log(`getDOCXText error`, error)
+    return "";
   }
 }
-
-const removeInvalidCharacters = (str) => str.replace(/[^0-9a-zA-Z/._-]/g, '')
-
-const decodeURISpaces = (str) => decodeURI(str).replace(/\+/g, ' ')
-
-const isPDF = (str) => str.match(/\.pdf|\.PDF/g)
-
-const isDOC = (str) => str.match(/\.docx|\.doc|\.DOCX|\.DOC/g)
 
 const getJBatch = async ({ bucketname, filename, buffer }) => {
   const type = 'add';
@@ -142,7 +150,7 @@ exports.handler = async (event) => {
     const isDelete = !!event.Records[0].eventName.match(/Delete|delete/)
 
     console.log(
-      `Starting free-jurisprudence-doc-indexer method: ${
+      `File indexer method: ${
         isDelete ? 'delete' : 'add'
       }`
     )
