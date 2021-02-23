@@ -194,7 +194,7 @@ exports.handler = async (event) => {
 
       await addToCS({
         bucketname,
-        filename: removeInvalidCharacters(filename),
+        filename,
         buffer,
         region,
         endpoint,
@@ -202,7 +202,7 @@ exports.handler = async (event) => {
     } else {
       await deleteFromCSIndex({
         bucketname,
-        filename: removeInvalidCharacters(filename),
+        filename,
         region,
         endpoint,
       });
