@@ -162,7 +162,7 @@ const deleteFromCSIndex = async ({
     const jbatch = [
       {
         type: 'delete',
-        id: bucketname + ':' + filename,
+        id: `${bucketname}:${removeInvalidCharacters(filename)}`
       },
     ]
 
