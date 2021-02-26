@@ -50,7 +50,7 @@ const isDeleteEvent = (event) =>
 const getPDFText = async (buffer) => {
   try {
     const text = (await pdf(buffer)).text;
-    return text;
+    return text.toString('utf-8');
   } catch (error) {
     console.log(`getPDFText error`, error);
     return '';
@@ -60,7 +60,7 @@ const getPDFText = async (buffer) => {
 const getDOCXText = async (buffer) => {
   try {
     const text = (await mammoth.extractRawText({ buffer })).value;
-    return text;
+    return text.toString('utf-8');
   } catch (error) {
     console.log(`getDOCXText error`, error);
     return '';
